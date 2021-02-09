@@ -1,7 +1,8 @@
 const jwt = require("jsonwebtoken")
 const config = require("config")
+const User = require("../models/User")
 
-module.exports = (req, res, next) => {
+module.exports = async (req, res, next) => {
     if (req.method === "OPTIONS") {
         return next()
     }
@@ -11,10 +12,9 @@ module.exports = (req, res, next) => {
         if(!token) {
             return res.status(401).json({ message: "Unauthorized"})
         }
-        console.log(token)
         const decoded = jwt.verify(token, config.get("jwtSecret")).userId;
-        console.log(decoded)
-        req.user = decoded
+        req.userId = decoded
+        req.user = await User.findById(decoded)
         next()
     } catch (e) {
         console.log(e)

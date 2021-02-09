@@ -21,7 +21,7 @@ router.post(
                 message: 'data is out of correct'
             })
         }
-        const { email, password } = req.body
+        const { email, password, fullName } = req.body
         const candidate = await User.findOne({email});
         
         if(candidate) {
@@ -31,13 +31,16 @@ router.post(
         
         const hashedPassword = await bcrypt.hash(password, 12)
         
-        const user = await User.create({ email, password: hashedPassword})
-        console.log(1)
-        
+        const user = await User.create({ email, password: hashedPassword, fullName})
+        const token = jwt.sign(
+            { userId: user.id },
+            config.get('jwtSecret'),
+            // { expiresIn: '1h' }
+            )
         
         await user.save()
         
-        res.status(201).json({ message: "user created"})
+        res.status(201).json({ token, user})
 
     } catch (e) {
         res.status(500).json({ message: 'whoops something wrong'})
@@ -70,8 +73,6 @@ router.post('/login',
         }
 
         const isMatch = await bcrypt.compare(password, user.password)
-        console.log(password, user.password)
-        console.log(isMatch)
         if (!isMatch) {
             return res.status(400).json({ message: "warning of relevant passvord"})
         }
@@ -82,7 +83,7 @@ router.post('/login',
             // { expiresIn: '1h' }
             )
         
-        res.json({ token, userId: user.id })
+        res.json({ token, user })
     } catch (e) {
         res.status(500).json({ message: 'OOps something wrong'})
     }

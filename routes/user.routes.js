@@ -5,7 +5,7 @@ const auth = require("../midedleware/auth.middleware")
 
 const router = Router()
 
-router.post('/:id', auth, async (req, res) => {
+router.post('/user', auth, async (req, res) => {
     try {
         const userId = req.user
         const user = await User.findById(userId);

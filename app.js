@@ -1,6 +1,7 @@
 const express = require("express");
 const config = require("config");
 const mongoose = require("mongoose");
+const cors = require('cors')
 const morgan = require('morgan')
 
 
@@ -8,9 +9,13 @@ const PORT = config.get("port") || 5000;
 
 
 const app = express();
+app.use(cors())
 app.use(express.json())
 app.use(morgan('dev'))
+app.use('/api', require('./routes/message.routes'))
+app.use('/api', require('./routes/img.routes'))
 app.use('/api', require('./routes/user.routes')) 
+app.use('/api', require('./routes/chat.routes'))
 app.use('/api/auth', require('./routes/auth.routes'))
 
 console.log(process.cwd())

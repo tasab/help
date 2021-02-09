@@ -1,5 +1,8 @@
 {
     "port": 5000,
     "jwtSecret": "test secret string",
-    "mongoUri": "mongodb://127.0.0.1:27017/sasha?authSource=$external"
+    "mongoUri": "mongodb://127.0.0.1:27017/sasha?authSource=$external",
+    "BUCKET_NAME": "node-img",
+    "IAM_USER_KEY": "AKIAIGRG6JGY3YM45AEA",
+    "IAM_USER_SECRET": "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"
 }
